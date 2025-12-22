@@ -1,20 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'expo-router';
+import { Alert, ActivityIndicator, View } from 'react-native';
 import { SignInScreen } from '@/components/screens';
-import { useAuthStore } from '@/stores';
+import { authService } from '@/services/authService';
 
 export default function SignIn() {
   const router = useRouter();
-  const login = useAuthStore((state) => state.login);
+  const [loading, setLoading] = useState(false);
 
-  const handleSignIn = (email: string, password: string) => {
-    // TODO: Add real validation
-    if (email && password) {
-      // Simulate successful login
-      login(email, 'User Name'); // Later: get real name from API
-      router.replace('/(tabs)');
-    } else {
-      alert('Please enter email and password');
+  const handleSignIn = async (email: string, password: string) => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please enter email and password');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const result = await authService.signIn(email, password);
+
+      if (result.success) {
+        // onAuthStateChanged will handle navigation
+        router.replace('/(tabs)');
+      } else {
+        Alert.alert('Sign In Failed', result.error || 'Please try again');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'An unexpected error occurred');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -27,14 +41,20 @@ export default function SignIn() {
   };
 
   const handleGoogleSignIn = () => {
-    // TODO: Implement Google sign in
-    console.log('Google sign in');
+    Alert.alert('Coming Soon', 'Google sign in will be available soon');
   };
 
   const handleAppleSignIn = () => {
-    // TODO: Implement Apple sign in
-    console.log('Apple sign in');
+    Alert.alert('Coming Soon', 'Apple sign in will be available soon');
   };
+
+  if (loading) {
+    return (
+      <View className="flex-1 items-center justify-center bg-gray-50">
+        <ActivityIndicator size="large" color="#4F46E5" />
+      </View>
+    );
+  }
 
   return (
     <SignInScreen

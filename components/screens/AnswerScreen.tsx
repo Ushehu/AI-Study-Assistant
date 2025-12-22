@@ -4,10 +4,10 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
   ActivityIndicator,
 } from 'react-native';
 import { Icons } from '../Icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface AnswerScreenProps {
   question: string;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'expo-router';
+import { Alert } from 'react-native';
 import { AnswerScreen } from '@/components/screens';
 import { useQuestionStore } from '@/stores';
 
@@ -16,7 +17,9 @@ export default function Answer() {
     setIsBookmarked(currentQuestion?.isBookmarked || false);
   }, [currentQuestion]);
 
+  // If no question, go back
   if (!currentQuestion) {
+    Alert.alert('Error', 'No question found');
     router.back();
     return null;
   }
@@ -29,6 +32,12 @@ export default function Answer() {
     if (currentQuestion) {
       toggleBookmark(currentQuestion.id);
       setIsBookmarked(!isBookmarked);
+      
+      // Show feedback
+      Alert.alert(
+        'Success',
+        isBookmarked ? 'Removed from bookmarks' : 'Added to bookmarks'
+      );
     }
   };
 

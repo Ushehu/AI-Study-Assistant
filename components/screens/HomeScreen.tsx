@@ -1,28 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Icons } from '../Icons';
+import { VoiceButton } from '../VoiceButton';
 
 interface HomeScreenProps {
   onAskQuestion?: (question: string) => void;
   onViewBookmarks?: () => void;
+  isRecording?: boolean;
+  voiceTranscript?: string;
+  onStartVoice?: () => void;
+  onStopVoice?: () => void;
+  voiceAvailable?: boolean;
 }
 
 export const HomeScreen: React.FC<HomeScreenProps> = ({
   onAskQuestion,
   onViewBookmarks,
+  isRecording = false,
+  voiceTranscript = '',
+  onStartVoice,
+  onStopVoice,
+  voiceAvailable = false,
 }) => {
   const [question, setQuestion] = useState('');
+
+  // Update question when voice transcript changes
+  useEffect(() => {
+    if (voiceTranscript) {
+      setQuestion(voiceTranscript);
+    }
+  }, [voiceTranscript]);
 
   const handleAskQuestion = () => {
     if (question.trim() && onAskQuestion) {
       onAskQuestion(question.trim());
+      setQuestion(''); // Clear after asking
+    }
+  };
+
+  const handleVoicePress = () => {
+    if (isRecording) {
+      onStopVoice?.();
+    } else {
+      onStartVoice?.();
     }
   };
 
@@ -57,17 +84,50 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({
                 value={question}
                 onChangeText={setQuestion}
               />
+              
+              {/* Voice Recording Indicator */}
+              {isRecording && (
+                <View className="mt-3 flex-row items-center">
+                  <View className="w-2 h-2 rounded-full bg-red-500 mr-2" />
+                  <Text className="text-sm text-red-500 font-medium">
+                    Listening...
+                  </Text>
+                </View>
+              )}
             </View>
 
-            {/* Primary Action Button */}
-            <TouchableOpacity 
-              className="bg-indigo-600 rounded-full py-4 mt-4 shadow-sm"
-              onPress={handleAskQuestion}
-            >
-              <Text className="text-white text-center text-base font-semibold">
-                Ask AI
-              </Text>
-            </TouchableOpacity>
+            {/* Voice Button Row */}
+            {voiceAvailable && (
+              <View className="flex-row items-center justify-between mt-4">
+                <View className="flex-1 mr-3">
+                  <TouchableOpacity 
+                    className="bg-indigo-600 rounded-full py-4 shadow-sm"
+                    onPress={handleAskQuestion}
+                  >
+                    <Text className="text-white text-center text-base font-semibold">
+                      Ask AI
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                
+                <VoiceButton
+                  isRecording={isRecording}
+                  onPress={handleVoicePress}
+                />
+              </View>
+            )}
+
+            {/* Ask Button (if no voice) */}
+            {!voiceAvailable && (
+              <TouchableOpacity 
+                className="bg-indigo-600 rounded-full py-4 mt-4 shadow-sm"
+                onPress={handleAskQuestion}
+              >
+                <Text className="text-white text-center text-base font-semibold">
+                  Ask AI
+                </Text>
+              </TouchableOpacity>
+            )}
 
             {/* Secondary Action */}
             <TouchableOpacity 

@@ -5,19 +5,41 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Icons } from '@/components/Icons';
+import { authService } from '@/services/authService';
 
 export default function ForgotPassword() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleResetPassword = () => {
-    // TODO: Implement password reset logic
-    setIsSubmitted(true);
+  const handleResetPassword = async () => {
+    if (!email.trim()) {
+      Alert.alert('Error', 'Please enter your email address');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const result = await authService.resetPassword(email);
+
+      if (result.success) {
+        setIsSubmitted(true);
+      } else {
+        Alert.alert('Error', result.error || 'Failed to send reset email');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'An unexpected error occurred');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleBackToSignIn = () => {
@@ -66,6 +88,7 @@ export default function ForgotPassword() {
                     onChangeText={setEmail}
                     keyboardType="email-address"
                     autoCapitalize="none"
+                    editable={!loading}
                   />
                 </View>
               </View>
@@ -74,10 +97,15 @@ export default function ForgotPassword() {
               <TouchableOpacity 
                 className="bg-indigo-600 rounded-full py-4 shadow-sm"
                 onPress={handleResetPassword}
+                disabled={loading}
               >
-                <Text className="text-white text-center text-base font-semibold">
-                  Send Reset Link
-                </Text>
+                {loading ? (
+                  <ActivityIndicator color="#FFFFFF" />
+                ) : (
+                  <Text className="text-white text-center text-base font-semibold">
+                    Send Reset Link
+                  </Text>
+                )}
               </TouchableOpacity>
             </View>
           ) : (

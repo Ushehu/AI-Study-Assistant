@@ -5,9 +5,9 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
 } from 'react-native';
 import { Icons } from '../Icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface SignInScreenProps {
   onSignIn?: (email: string, password: string) => void;
@@ -131,15 +131,6 @@ export const SignInScreen: React.FC<SignInScreenProps> = ({
             >
               <Text className="text-gray-700 text-center text-base font-medium">
                 Continue with Google
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity 
-              className="bg-white rounded-full py-4 border border-gray-200"
-              onPress={onAppleSignIn}
-            >
-              <Text className="text-gray-700 text-center text-base font-medium">
-                Continue with Apple
               </Text>
             </TouchableOpacity>
 

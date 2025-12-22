@@ -6,42 +6,38 @@
     "orientation": "portrait",
     "icon": "./assets/images/app-icon.png",
     "splash": {
-         "image": "./assets/images/splash.png",
-         "backgroundColor": "#4F46E5"
-       },
+      "image": "./assets/images/splash.png",
+      "backgroundColor": "#4F46E5",
+      "resizeMode": "contain"
+    },
     "scheme": "aistudyassistant",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.yourname.aistudyassistant",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "This app needs access to your microphone to enable voice questions and speech-to-text features.",
+        "NSSpeechRecognitionUsageDescription": "This app uses speech recognition to convert your voice into text for asking questions."
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE"
-      
+        "backgroundColor": "#4F46E5"
       },
+      "package": "com.yourname.aistudyassistant",
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
     "web": {
       "bundler": "metro",
       "output": "static"
-    
     },
     "plugins": [
-      "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
-          "dark": {
-            "backgroundColor": "#000000"
-          }
-        }
-      ]
+      "expo-router"
     ],
     "experiments": {
       "typedRoutes": true,

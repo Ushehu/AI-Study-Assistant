@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
+import { auth } from '@/config/firebase';
 
 export interface User {
   email: string;
@@ -10,53 +12,84 @@ export interface User {
 
 interface AuthState {
   user: User | null;
+  firebaseUser: FirebaseUser | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, name: string) => void;
+  
+  // Actions
+  setUser: (user: User | null) => void;
+  setFirebaseUser: (user: FirebaseUser | null) => void;
+  setLoading: (loading: boolean) => void;
   logout: () => void;
-  updateUser: (user: Partial<User>) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
+      firebaseUser: null,
       isAuthenticated: false,
       isLoading: true,
 
-      login: (email: string, name: string) => {
-        set({ 
-          user: { 
-            email, 
-            name,
-            id: Date.now().toString(), // Replace with real user ID later
-          }, 
-          isAuthenticated: true,
+      setUser: (user) => {
+        set({
+          user,
+          isAuthenticated: !!user,
           isLoading: false,
         });
       },
 
+      setFirebaseUser: (firebaseUser) => {
+        if (firebaseUser) {
+          const user: User = {
+            id: firebaseUser.uid,
+            email: firebaseUser.email || '',
+            name: firebaseUser.displayName || 'User',
+          };
+          set({
+            firebaseUser,
+            user,
+            isAuthenticated: true,
+            isLoading: false,
+          });
+        } else {
+          set({
+            firebaseUser: null,
+            user: null,
+            isAuthenticated: false,
+            isLoading: false,
+          });
+        }
+      },
+
+      setLoading: (loading) => {
+        set({ isLoading: loading });
+      },
+
       logout: () => {
-        set({ 
-          user: null, 
+        set({
+          user: null,
+          firebaseUser: null,
           isAuthenticated: false,
           isLoading: false,
         });
       },
-
-      updateUser: (userData) => {
-        set((state) => ({
-          user: state.user ? { ...state.user, ...userData } : null,
-        }));
-      },
     }),
     {
-      name: 'auth-storage', // unique name for this store
+      name: 'auth-storage',
       storage: createJSONStorage(() => AsyncStorage),
-      onRehydrateStorage: () => (state) => {
-        // Called when storage is rehydrated
-        state?.isLoading && (state.isLoading = false);
-      },
+      // Don't persist firebaseUser (it's handled by Firebase)
+      partialize: (state) => ({
+        user: state.user,
+        isAuthenticated: state.isAuthenticated,
+      }),
     }
   )
 );
+
+// Listen to Firebase auth state changes
+// This runs once when the app starts
+onAuthStateChanged(auth, (firebaseUser) => {
+  console.log('Auth state changed:', firebaseUser?.email || 'No user');
+  useAuthStore.getState().setFirebaseUser(firebaseUser);
+});

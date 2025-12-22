@@ -4,9 +4,9 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  SafeAreaView,
 } from 'react-native';
 import { Icons } from '../Icons';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface ProfileScreenProps {
   onSignOut?: () => void;

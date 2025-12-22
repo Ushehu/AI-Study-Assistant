@@ -1,13 +1,25 @@
 import React, { useState } from 'react';
 import { useRouter } from 'expo-router';
+import { Alert, View, ActivityIndicator, Text } from 'react-native';
 import { HomeScreen } from '@/components/screens';
 import { useQuestionStore } from '@/stores';
-import { Alert } from 'react-native';
+import { aiService } from '@/services/aiService';
+import { useVoiceInput } from '@/hooks/useVoiceInput';
 
-export default function Home() {
+export default function Home() {  // ← Must have "export default"
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const { addQuestion, setCurrentQuestion } = useQuestionStore();
+  const { addQuestion } = useQuestionStore();
+  
+  // Voice input hook
+  const {
+    isRecording,
+    transcript,
+    isAvailable,
+    startRecording,
+    stopRecording,
+    clearTranscript,
+  } = useVoiceInput();
 
   const handleAskQuestion = async (question: string) => {
     if (!question.trim()) {
@@ -16,25 +28,36 @@ export default function Home() {
     }
 
     setLoading(true);
+    clearTranscript();
     
     try {
-      // TODO: Replace with actual AI API call
-      // Simulate AI response
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      console.log('📝 User question:', question);
       
-      const mockAnswer = `This is a sample answer to: "${question}". In a real app, this would come from an AI service like OpenAI or Claude.`;
+      const result = await aiService.askQuestion(question);
       
-      // Add question to store
-      addQuestion({
-        question,
-        answer: mockAnswer,
-        isBookmarked: false,
-      });
-      
-      // Navigate to answer screen
-      router.push('/answer');
+      if (result.success && result.answer) {
+        const newQuestion = {
+          question: question.trim(),
+          answer: result.answer,
+          isBookmarked: false,
+        };
+        
+        addQuestion(newQuestion);
+        
+        console.log('✅ Question saved, navigating to answer');
+        router.push('/answer');
+      } else {
+        Alert.alert(
+          'AI Error', 
+          result.error || 'Failed to get answer. Please try again.'
+        );
+      }
     } catch (error) {
-      Alert.alert('Error', 'Failed to get answer. Please try again.');
+      console.error('Error asking question:', error);
+      Alert.alert(
+        'Error', 
+        'Something went wrong. Please check your internet connection and try again.'
+      );
     } finally {
       setLoading(false);
     }
@@ -44,10 +67,26 @@ export default function Home() {
     router.push('/(tabs)/bookmarks');
   };
 
+  if (loading) {
+    return (
+      <View className="flex-1 items-center justify-center bg-gray-50">
+        <ActivityIndicator size="large" color="#4F46E5" />
+        <Text className="text-base font-medium text-gray-900 mt-4">
+          AI is thinking...
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <HomeScreen 
       onAskQuestion={handleAskQuestion}
       onViewBookmarks={handleViewBookmarks}
+      isRecording={isRecording}
+      voiceTranscript={transcript}
+      onStartVoice={startRecording}
+      onStopVoice={stopRecording}
+      voiceAvailable={isAvailable}
     />
   );
 }

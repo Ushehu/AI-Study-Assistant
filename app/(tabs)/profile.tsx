@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'expo-router';
-import { Alert } from 'react-native';
+import { Alert, ActivityIndicator, View } from 'react-native';
 import { ProfileScreen } from '@/components/screens';
-import { useAuthStore, useQuestionStore } from '@/stores';
+import { authService } from '@/services/authService';
 
 export default function Profile() {
   const router = useRouter();
-  const logout = useAuthStore((state) => state.logout);
-  const clearAllQuestions = useQuestionStore((state) => state.clearAllQuestions);
+  const [loading, setLoading] = useState(false);
 
   const handleSignOut = () => {
     Alert.alert(
@@ -21,16 +20,34 @@ export default function Profile() {
         {
           text: 'Sign Out',
           style: 'destructive',
-          onPress: () => {
-            logout();
-            // Optionally clear questions on logout
-            // clearAllQuestions();
-            router.replace('/(auth)/sign-in');
+          onPress: async () => {
+            setLoading(true);
+            try {
+              const result = await authService.signOut();
+              
+              if (result.success) {
+                router.replace('/(auth)/sign-in');
+              } else {
+                Alert.alert('Error', result.error || 'Failed to sign out');
+              }
+            } catch (error) {
+              Alert.alert('Error', 'An unexpected error occurred');
+            } finally {
+              setLoading(false);
+            }
           },
         },
       ]
     );
   };
+
+  if (loading) {
+    return (
+      <View className="flex-1 items-center justify-center bg-gray-50">
+        <ActivityIndicator size="large" color="#4F46E5" />
+      </View>
+    );
+  }
 
   return (
     <ProfileScreen onSignOut={handleSignOut} />
