@@ -309,5 +309,5 @@ Give a ⭐️ if this project helped you!
 ---
 
 <div align="center">
-  <sub>Built with ❤️ by Umar Faruk</sub>
+  <sub>Built with ❤️ by Umar Faruk shehu</sub>
 </div>
