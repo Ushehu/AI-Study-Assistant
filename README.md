@@ -266,7 +266,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 👨‍💻 Author
 
-**Umar Faruk**
+**Umar Faruk Shehu**
 
 - GitHub: [Ushehu](https://github.com/Ushehu)
 - Email: ushehu132@gmail.com
