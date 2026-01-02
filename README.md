@@ -23,21 +23,21 @@ A modern, AI-powered mobile study assistant built with React Native and Expo. As
 <div align="center">
 
 ### Authentication Screens
-<img src="./screenshots/1-signin.png" width="250" alt="Sign In"> <img src="./screenshots/2-signup.png" width="250" alt="Sign Up"> <img src="./screenshots/3-forgot-password.png" width="250" alt="Forgot Password">
+<img src="./screenshots/1-signin.jpg" width="250" alt="Sign In"> <img src="./screenshots/2-signup.jpg" width="250" alt="Sign Up"> <img src="./screenshots/3-forgot-password.jpg" width="250" alt="Forgot Password">
 
 ### Main App Screens
-<img src="./screenshots/4-home.png" width="250" alt="Home Screen"> <img src="./screenshots/5-answer.png" width="250" alt="AI Answer"> <img src="./screenshots/6-bookmarks.png" width="250" alt="Bookmarks"> <img src="./screenshots/7-profile.png" width="250" alt="Profile">
+<img src="./screenshots/4-home.jpg" width="250" alt="Home Screen"> <img src="./screenshots/5-answer.jpg" width="250" alt="AI Answer"> <img src="./screenshots/6-bookmarks.jpg" width="250" alt="Bookmarks"> <img src="./screenshots/7-profile.jpg" width="250" alt="Profile">
 
 </div>
 
 > **Note:** Add your screenshots to a `screenshots` folder in the root of your repository with these filenames:
-> - `1-signin.png` - Sign in screen
-> - `2-signup.png` - Sign up screen
-> - `3-forgot-password.png` - Password reset screen
-> - `4-home.png` - Home/Ask question screen
-> - `5-answer.png` - AI answer display
-> - `6-bookmarks.png` - Bookmarks list
-> - `7-profile.png` - Profile/settings screen
+> - `1-signin.jpg` - Sign in screen
+> - `2-signup.jpg` - Sign up screen
+> - `3-forgot-password.jpg` - Password reset screen
+> - `4-home.jpg` - Home/Ask question screen
+> - `5-answer.jpgg` - AI answer display
+> - `6-bookmarks.jpg` - Bookmarks list
+> - `7-profile.jpg` - Profile/settings screen
 
 ## 🛠️ Tech Stack
 
