@@ -30,15 +30,6 @@ A modern, AI-powered mobile study assistant built with React Native and Expo. As
 
 </div>
 
-> **Note:** Add your screenshots to a `screenshots` folder in the root of your repository with these filenames:
-> - `1-signin.jpg` - Sign in screen
-> - `2-signup.jpg` - Sign up screen
-> - `3-forgot-password.jpg` - Password reset screen
-> - `4-home.jpg` - Home/Ask question screen
-> - `5-answer.jpgg` - AI answer display
-> - `6-bookmarks.jpg` - Bookmarks list
-> - `7-profile.jpg` - Profile/settings screen
-
 ## 🛠️ Tech Stack
 
 ### Frontend
