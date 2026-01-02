@@ -23,10 +23,12 @@ A modern, AI-powered mobile study assistant built with React Native and Expo. As
 <div align="center">
 
 ### Authentication Screens
+<<<<<<< HEAD
 <img src="./screenshots/1-signin.jpg" width="250" alt="Sign In"> <img src="./screenshots/2-signup.jpg" width="250" alt="Sign Up"> <img src="./screenshots/3-forgot-password.jpg" width="250" alt="Forgot Password">
 
 ### Main App Screens
 <img src="./screenshots/4-home.jpg" width="250" alt="Home Screen"> <img src="./screenshots/5-answer.jpg" width="250" alt="AI Answer"> <img src="./screenshots/6-bookmarks.jpg" width="250" alt="Bookmarks"> <img src="./screenshots/7-profile.jpg" width="250" alt="Profile">
+
 
 </div>
 
@@ -268,8 +270,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Umar Faruk Shehu**
 
+<<<<<<< HEAD
 - GitHub: [Ushehu](https://github.com/Ushehu)
 - Email: ushehu132@gmail.com
+=======
+- GitHub: [@yourusername](https://github.com/yourusername)
+- Email: your.email@example.com
+>>>>>>> dea6d5c (navigation bar)
 
 ## 🙏 Acknowledgments
 
@@ -309,5 +316,13 @@ Give a ⭐️ if this project helped you!
 ---
 
 <div align="center">
+<<<<<<< HEAD
   <sub>Built with ❤️ by Umar Faruk shehu</sub>
+=======
+  <sub>Built with ❤️ by Umar Faruk</sub>
+<<<<<<< HEAD
+>>>>>>> 9d4c7dc (navigation bar)
 </div>
+=======
+</div>
+>>>>>>> dea6d5c (navigation bar)
